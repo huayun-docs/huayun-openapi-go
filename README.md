@@ -4,8 +4,8 @@
 执行go get github.com/huayun-docs/huayun-openapi-go<br />
 代码：<br />
 import (<br />
-  "fmt"<br />
-  "github.com/huayun-docs/huayun-openapi-go/chinacgateway"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"fmt"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"github.com/huayun-docs/huayun-openapi-go/chinacgateway"<br />
 )<br /><br />
 g := chinacgateway.NewGateWayApi("region", "ak", "sk")&nbsp;//分别传入机房标识、ak和sk<br >
 r := map[string]string{<br >
