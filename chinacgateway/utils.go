@@ -20,10 +20,10 @@ func percentEncode(str string) string {
 	return str
 }
 
-func getSignature(g *GateWayApi, request string) string {
-	header := g.Header
+func getSignature(g *gateWayApi, request string) string {
+	header := g.header
 	var t []string
-	t = append(t, g.Method)
+	t = append(t, g.method)
 	t = append(t, "\n")
 	h := md5.New()
 	h.Write([]byte(request))
@@ -37,7 +37,7 @@ func getSignature(g *GateWayApi, request string) string {
 	t = append(t, "\n")
 	str := strings.Join(t, "")
 
-	return computeHmac256(str, g.AccessKeySecret)
+	return computeHmac256(str, g.accessKeySecret)
 }
 
 func computeHmac256(message string, secret string) string {
@@ -47,26 +47,27 @@ func computeHmac256(message string, secret string) string {
 	return percentEncode(base64.StdEncoding.EncodeToString(h.Sum(nil)))
 }
 
-func callServerRes(g *GateWayApi) (string, error) {
+func callServerRes(g *gateWayApi) (string, error) {
 	//请求
 	client := &http.Client{}
 	var req *http.Request
 	var err error
-	if g.Method == "GET" {
-		req, err = http.NewRequest(g.Method, g.Ourl, nil)
+	if g.method == "GET" {
+		req, err = http.NewRequest(g.method, g.ourl, nil)
 	} else {
-		req, err = http.NewRequest(g.Method, g.Ourl, strings.NewReader(g.Oreq))
+		req, err = http.NewRequest(g.method, g.ourl, strings.NewReader(g.oreq))
 	}
 
 	if err != nil {
 		return "", err
 	}
-	for k, v := range g.Header {
+	for k, v := range g.header {
 		req.Header.Set(k, v)
 	}
 
 	//处理返回结果
 	res, _ := client.Do(req)
+	g.statusCode = res.StatusCode
 
 	defer res.Body.Close()
 	by, err := ioutil.ReadAll(res.Body)
