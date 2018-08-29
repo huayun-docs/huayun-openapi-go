@@ -6,72 +6,73 @@ import (
 	"time"
 )
 
-type GateWayApi struct {
-	Url             string
-	AccessKeyId     string
-	AccessKeySecret string
-	Region          string
-	Version         string
-	Date            string
+type gateWayApi struct {
+	url             string
+	accessKeyId     string
+	accessKeySecret string
+	region          string
+	version         string
+	date            string
 
-	Method string
-	Header map[string]string
-	Req    map[string]string
-	Ourl   string
-	Oreq   string
-	Res    string
+	method     string
+	header     map[string]string
+	req        map[string]string
+	ourl       string
+	oreq       string
+	Res        string
+	statusCode int
 }
 
-func NewGateWayApi(tag, ak, sk string) *GateWayApi {
-	g := &GateWayApi{
-		Url:             "https://api.chinac.com",
-		AccessKeyId:     ak,
-		AccessKeySecret: sk,
-		Region:          tag,
-		Version:         "1.0",
-		Date:            time.Now().Format("2006-01-02T15:04:05 +0800"),
-		Method:          "GET",
+func NewGateWayApi(tag, ak, sk string) *gateWayApi {
+	g := &gateWayApi{
+		url:             "https://api.chinac.com",
+		accessKeyId:     ak,
+		accessKeySecret: sk,
+		region:          tag,
+		version:         "1.0",
+		date:            time.Now().Format("2006-01-02T15:04:05 +0800"),
+		method:          "GET",
 	}
 	header := map[string]string{
 		"Content-Type": `application/json;charset=UTF-8`,
-		"Date":         g.Date}
-	g.Header = header
+		"Date":         g.date}
+	g.header = header
 
 	return g
 }
 
-func (g *GateWayApi) SetMethod(m string) *GateWayApi {
-	g.Method = m
+func (g *gateWayApi) SetMethod(m string) *gateWayApi {
+	g.method = m
 	return g
 }
 
-func (g *GateWayApi) SetUrl(nurl string) *GateWayApi {
-	g.Url = nurl
+func (g *gateWayApi) SetUrl(nurl string) *gateWayApi {
+	g.url = nurl
 	return g
 }
 
-func (g *GateWayApi) Clear() *GateWayApi {
-	g = &GateWayApi{}
+func (g *gateWayApi) Clear() *gateWayApi {
+	g = &gateWayApi{}
 	return g
 }
 
-func (g *GateWayApi) SetRequest(r map[string]string) (*GateWayApi, error) {
+func (g *gateWayApi) SetRequest(r map[string]string) (*gateWayApi, error) {
 	if _, ok := r["Action"]; !ok {
 		return nil, fmt.Errorf("The params has no 'Action'")
 	}
-	g.Req = r
+	g.req = r
 	return g, nil
 }
 
-func (g *GateWayApi) Request() (string, error) {
-	if len(g.Req) <= 0 {
+func (g *gateWayApi) Request() (string, error) {
+	if len(g.req) <= 0 {
 		return "", fmt.Errorf("No params")
 	}
-	request := g.Req
-	request["Region"] = g.Region
-	request["AccessKeyId"] = g.AccessKeyId
-	request["Version"] = g.Version
-	request["Date"] = g.Date
+	request := g.req
+	request["Region"] = g.region
+	request["AccessKeyId"] = g.accessKeyId
+	request["Version"] = g.version
+	request["Date"] = g.date
 
 	var q []string
 	for k, v := range request {
@@ -85,12 +86,16 @@ func (g *GateWayApi) Request() (string, error) {
 	signature := getSignature(g, quest)
 	quest += "&Signature=" + signature
 
-	rurl := g.Url
-	if g.Method == "GET" {
+	rurl := g.url
+	if g.method == "GET" {
 		rurl += "?" + quest
 	}
-	g.Ourl = rurl
-	g.Oreq = quest
+	g.ourl = rurl
+	g.oreq = quest
 
 	return callServerRes(g)
+}
+
+func (g *gateWayApi) GetStatusCode() int {
+	return g.statusCode
 }
