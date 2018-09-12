@@ -34,8 +34,9 @@ func NewGateWayApi(tag, ak, sk string) *gateWayApi {
 		method:          "GET",
 	}
 	header := map[string]string{
-		"Content-Type": `application/json;charset=UTF-8`,
-		"Date":         g.date}
+		"Content-Type":    `application/json;charset=UTF-8`,
+		"Accept-Encoding": "*",
+		"Date":            g.date}
 	g.header = header
 
 	return g
