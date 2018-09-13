@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -55,7 +56,8 @@ func callServerRes(g *gateWayApi) (string, error) {
 	if g.method == "GET" {
 		req, err = http.NewRequest(g.method, g.ourl, nil)
 	} else {
-		req, err = http.NewRequest(g.method, g.ourl, strings.NewReader(g.oreq))
+		body, _ := json.Marshal(g.oreq)
+		req, err = http.NewRequest(g.method, g.ourl, strings.NewReader(string(body)))
 	}
 
 	if err != nil {

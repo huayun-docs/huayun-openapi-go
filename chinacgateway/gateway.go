@@ -18,7 +18,7 @@ type gateWayApi struct {
 	header     map[string]string
 	req        map[string]string
 	ourl       string
-	oreq       string
+	oreq       map[string]string
 	Res        string
 	statusCode int
 }
@@ -74,6 +74,16 @@ func (g *gateWayApi) Request() (string, error) {
 	request["AccessKeyId"] = g.accessKeyId
 	request["Version"] = g.version
 	request["Date"] = g.date
+	g.oreq = request
+	if g.method != "GET" {
+		request = map[string]string{
+			"Region":      g.region,
+			"AccessKeyId": g.accessKeyId,
+			"Date":        g.date,
+			"Action":      g.req["Action"],
+			"Version":     g.version,
+		}
+	}
 
 	var q []string
 	for k, v := range request {
@@ -87,12 +97,8 @@ func (g *gateWayApi) Request() (string, error) {
 	signature := getSignature(g, quest)
 	quest += "&Signature=" + signature
 
-	rurl := g.url
-	if g.method == "GET" {
-		rurl += "?" + quest
-	}
+	rurl := g.url + "?" + quest
 	g.ourl = rurl
-	g.oreq = quest
 
 	return callServerRes(g)
 }
