@@ -7,14 +7,15 @@
 import (
     "fmt"
 
-    "github.com/huayun-docs/huayun-openapi-go/chinacgateway"
+    "github.com/huayun-docs/huayun-openapi-go/chinacgateway/core"
+    "github.com/huayun-docs/huayun-openapi-go/chinacgateway/ecs"
 )
 
 g := chinacgateway.NewGateWayApi("region", "ak", "sk") //分别传入机房标识、ak和sk
-r := map[string]string{
-    "Action": "DescribeRouters",
-    "Id.0": "r-pp16mi6rgfo12c",
-}
+
+descVol := chinacgatewayecs.DescribeInstances()
+r := descVol.GetRequest()
+
 g, err := g.SetRequest(r)
 if err != nil {
     fmt.Println(err)
