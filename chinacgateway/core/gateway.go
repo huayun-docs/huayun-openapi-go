@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type gateWayApi struct {
+type GateWayApi struct {
 	url             string
 	accessKeyId     string
 	accessKeySecret string
@@ -23,8 +23,8 @@ type gateWayApi struct {
 	statusCode int
 }
 
-func NewGateWayApi(tag, ak, sk string) *gateWayApi {
-	g := &gateWayApi{
+func NewGateWayApi(tag, ak, sk string) *GateWayApi {
+	g := &GateWayApi{
 		url:             "https://api.chinac.com",
 		accessKeyId:     ak,
 		accessKeySecret: sk,
@@ -42,22 +42,22 @@ func NewGateWayApi(tag, ak, sk string) *gateWayApi {
 	return g
 }
 
-func (g *gateWayApi) SetMethod(m string) *gateWayApi {
+func (g *GateWayApi) SetMethod(m string) *GateWayApi {
 	g.method = m
 	return g
 }
 
-func (g *gateWayApi) SetUrl(nurl string) *gateWayApi {
+func (g *GateWayApi) SetUrl(nurl string) *GateWayApi {
 	g.url = nurl
 	return g
 }
 
-func (g *gateWayApi) Clear() *gateWayApi {
-	g = &gateWayApi{}
+func (g *GateWayApi) Clear() *GateWayApi {
+	g = &GateWayApi{}
 	return g
 }
 
-func (g *gateWayApi) SetRequest(r map[string]string) (*gateWayApi, error) {
+func (g *GateWayApi) SetRequest(r map[string]string) (*GateWayApi, error) {
 	if _, ok := r["Action"]; !ok {
 		return nil, fmt.Errorf("The params has no 'Action'")
 	}
@@ -65,7 +65,7 @@ func (g *gateWayApi) SetRequest(r map[string]string) (*gateWayApi, error) {
 	return g, nil
 }
 
-func (g *gateWayApi) Request() (string, error) {
+func (g *GateWayApi) Request() (string, error) {
 	if len(g.req) <= 0 {
 		return "", fmt.Errorf("No params")
 	}
@@ -102,6 +102,6 @@ func (g *gateWayApi) Request() (string, error) {
 	return callServerRes(g)
 }
 
-func (g *gateWayApi) GetStatusCode() int {
+func (g *GateWayApi) GetStatusCode() int {
 	return g.statusCode
 }

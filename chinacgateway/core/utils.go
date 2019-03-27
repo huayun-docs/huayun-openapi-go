@@ -22,7 +22,7 @@ func percentEncode(str string) string {
 	return str
 }
 
-func getSignature(g *gateWayApi, request string) string {
+func getSignature(g *GateWayApi, request string) string {
 	header := g.header
 	var t []string
 	t = append(t, g.method)
@@ -49,7 +49,7 @@ func computeHmac256(message string, secret string) string {
 	return percentEncode(base64.StdEncoding.EncodeToString(h.Sum(nil)))
 }
 
-func callServerRes(g *gateWayApi) (string, error) {
+func callServerRes(g *GateWayApi) (string, error) {
 	//请求
 	client := &http.Client{}
 	var req *http.Request
