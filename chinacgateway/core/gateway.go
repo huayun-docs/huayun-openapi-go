@@ -30,13 +30,12 @@ func NewGateWayApi(tag, ak, sk string) *GateWayApi {
 		accessKeySecret: sk,
 		region:          tag,
 		version:         "1.0",
-		date:            time.Now().Format("2006-01-02T15:04:05 +0800"),
 		method:          "GET",
 	}
 	header := map[string]string{
 		"Content-Type":    `application/json;charset=UTF-8`,
 		"Accept-Encoding": "*",
-		"Date":            g.date}
+	}
 	g.header = header
 
 	return g
@@ -69,6 +68,8 @@ func (g *GateWayApi) Request() (string, error) {
 	if len(g.req) <= 0 {
 		return "", fmt.Errorf("No params")
 	}
+	g.date = time.Now().Format("2006-01-02T15:04:05 +0800")
+	g.header["Date"] = g.date
 	request := g.req
 	request["Region"] = g.region
 	request["AccessKeyId"] = g.accessKeyId
