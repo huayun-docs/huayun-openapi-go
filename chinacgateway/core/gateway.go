@@ -25,7 +25,7 @@ type GateWayApi struct {
 
 func NewGateWayApi(tag, ak, sk string) *GateWayApi {
 	g := &GateWayApi{
-		url:             "https://api.chinac.com",
+		url:             "https://api.chinac.com/v2",
 		accessKeyId:     ak,
 		accessKeySecret: sk,
 		region:          tag,
@@ -53,6 +53,16 @@ func (g *GateWayApi) SetUrl(nurl string) *GateWayApi {
 
 func (g *GateWayApi) Clear() *GateWayApi {
 	g = &GateWayApi{}
+	return g
+}
+
+func (g *GateWayApi) SetOldVersion() *GateWayApi {
+	g.url = "https://api.chinac.com"
+	return g
+}
+
+func (g *GateWayApi) SetV2Version() *GateWayApi {
+	g.url = "https://api.chinac.com/v2"
 	return g
 }
 

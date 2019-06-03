@@ -12,6 +12,8 @@ import (
 )
 
 g := chinacgateway.NewGateWayApi("region", "ak", "sk") //分别传入机房标识、ak和sk
+// 调用旧版g.SetOldVersion()
+// 调用v2新版g.SetV2Version(),默认是新版
 
 descVol := chinacgatewayecs.DescribeInstances()
 r := descVol.GetRequest()
